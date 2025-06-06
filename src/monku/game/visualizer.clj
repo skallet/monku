@@ -78,15 +78,25 @@
           {:portal.viewer/default :portal.viewer/hiccup})))
 
 (defn display-board [game-state]
-  (tap-hiccup> (render-board game-state)))
+  (tap-hiccup> [:div {:style {:display "flex"}}
+                (render-board game-state)]))
+
+(defn display-board-and-cards [game-state cards]
+  (tap-hiccup> (into [:div
+                      {:style {:display "flex"}}
+                      (render-board game-state)]
+                     (mapv (fn [card]
+                            (render-card {:moves card :config (:config game-state)}))
+                           cards))))
 
 (defn display-card [card config]
-  (tap-hiccup> (render-card {:moves card :config config})))
+  (tap-hiccup> [:div {:style {:display "flex"}}
+                (render-card {:moves card :config config})]))
 
 (comment
   ;; Cards
   (display-card [[{:x 2 :y 2} :piece]] {:size 5 :show-coords true})
-  (display-card (nth game-cards 2) {:size 5})
+  (display-card (nth monku.game.cards/game-cards 2) {:size 5})
   (doseq [c monku.game.cards/game-cards]
     (display-card c {:size 5}))
 
@@ -97,7 +107,10 @@
                           [{:x 2 :y 4} :black]]
                 :players [[0 :white]
                           [4 :black]]}]
-    (display-board {:pieces (monku.game.board/initialize-board-state config)
-                    :config config}))
+    #_(display-board {:pieces (monku.game.board/initialize-board-state config)
+                    :config config})
+    #_(display-board-and-cards {:pieces (monku.game.board/initialize-board-state config)
+                              :config config}
+                             (take 3 monku.game.cards/game-cards)))
 
   :done)
