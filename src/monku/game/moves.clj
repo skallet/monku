@@ -182,4 +182,5 @@
                                                            [move :move]]])
     (monku.game.visualizer/display-board-and-cards next-state
                                                    (get-in next-state [:cards :black]))
-    (tap> next-state)))
+    (tap> next-state)
+    (tap> [:score (calculate-board-score state) (calculate-board-score next-state)])))
