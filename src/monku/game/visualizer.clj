@@ -26,7 +26,7 @@
      (for [row (reverse (range (get config :size 0)))]
        [:div {:key row :style {:display "flex"}}
         (for [col (range (get config :size 0))]
-          (let [coords   {:x row :y col}
+          (let [coords   {:x col :y row}
                 piece    (get positions coords)
                 temple   (get tempe-positions coords)
                 color    (square-color row col)
@@ -51,8 +51,8 @@
 (comment
   (let [config {:size   5
                 :monk-x 2
-                :temples [[{:x 0 :y 2} :white]
-                          [{:x 4 :y 2} :black]]
+                :temples [[{:x 2 :y 0} :white]
+                          [{:x 2 :y 4} :black]]
                 :players [[0 :white]
                           [4 :black]]}]
     (display-board {:pieces (initialize-board-state config)

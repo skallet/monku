@@ -11,33 +11,33 @@
     (is (= [[{:x 0 :y 0} {:piece :pawn :player :type}]]
            (sut/create-figs {:size        1
                              :player-type :type
-                             :figs-x      0
-                             :monk-y      5})))
+                             :figs-y      0
+                             :monk-x      5})))
     (is (= [[{:x 0 :y 0} {:piece :monk :player :type}]]
            (sut/create-figs {:size        1
                              :player-type :type
-                             :figs-x      0
-                             :monk-y      0}))))
+                             :figs-y      0
+                             :monk-x      0}))))
   (testing "multiple pawns"
     (let [with-size      10
           with-monk-size (dec (int (/ with-size 2)))
-          with-fig-x     5
+          with-fig-y     5
           with-player-type :player-a
           pawns          (sut/create-figs {:size        with-size
                                            :player-type with-player-type
-                                           :figs-x      with-fig-x
-                                           :monk-y      with-monk-size})]
+                                           :figs-y      with-fig-y
+                                           :monk-x      with-monk-size})]
       (is (= 10 (count pawns)))
       (is (= #{:pawn :monk} (into #{} (map (comp :piece second) pawns))))
-      (is (= (range 10) (map (comp :y first) pawns)))
-      (is (= (take with-size (repeatedly (constantly with-fig-x)))
-             (map (comp :x first) pawns)))
+      (is (= (range 10) (map (comp :x first) pawns)))
+      (is (= (take with-size (repeatedly (constantly with-fig-y)))
+             (map (comp :y first) pawns)))
       (is (= (take with-size (repeatedly (constantly with-player-type)))
              (map (comp :player second) pawns)))
       (is (= :monk (-> pawns (nth with-monk-size) second :piece)))
       (is (every? #(= :pawn (-> % second :piece))
-                  (filter (fn [[{:keys [y]}]]
-                            (not= y with-monk-size))
+                  (filter (fn [[{:keys [x]}]]
+                            (not= x with-monk-size))
                           pawns))))))
 
 (deftest initialize-board-state-test
