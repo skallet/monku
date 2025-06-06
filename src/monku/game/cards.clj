@@ -35,3 +35,22 @@
    card-3
    card-4
    card-5])
+
+(defn start? [card-entry]
+  (= :piece (second card-entry)))
+
+(defn card->start-coords [card]
+  (->> card
+       (filter start?)
+       (ffirst)))
+
+(defn card->move-coords [card]
+  (->> card
+       (filter (complement start?))
+       (map first)))
+
+(defn card-valid? [card]
+  (let [type-set (into #{} (map second card))
+        starts (filter start? card)]
+    (and (= #{:move :piece} type-set)
+         (= 1 (count starts)))))

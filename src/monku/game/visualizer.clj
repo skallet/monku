@@ -1,7 +1,4 @@
-(ns monku.game.visualizer
-  (:require
-   [monku.game.board :refer [initialize-board-state]]
-   [monku.game.cards :refer [game-cards]]))
+(ns monku.game.visualizer)
 
 ;; Chess piece symbols
 (def pieces
@@ -90,7 +87,7 @@
   ;; Cards
   (display-card [[{:x 2 :y 2} :piece]] {:size 5 :show-coords true})
   (display-card (nth game-cards 2) {:size 5})
-  (doseq [c game-cards]
+  (doseq [c monku.game.cards/game-cards]
     (display-card c {:size 5}))
 
   ;; Board
@@ -100,7 +97,7 @@
                           [{:x 2 :y 4} :black]]
                 :players [[0 :white]
                           [4 :black]]}]
-    (display-board {:pieces (initialize-board-state config)
+    (display-board {:pieces (monku.game.board/initialize-board-state config)
                     :config config}))
 
   :done)
