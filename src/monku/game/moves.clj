@@ -33,13 +33,18 @@
        (mapv #(card-move->position % card piece))
        (filterv #(valid-move? board-state piece %))))
 
+(defn valid-card-move? [board-state piece card move]
+  (let [moves (into #{} (->moves board-state piece card))]
+    (contains? moves move)))
+
 (comment
-  (let [config      {:size    5
-                     :monk-x  2
-                     :temples [[{:x 2 :y 0} :white]
-                               [{:x 2 :y 4} :black]]
-                     :players [[0 :white]
-                               [4 :black]]}
+  (let [config      {:size        5
+                     :show-coords false
+                     :monk-x      2
+                     :temples     [[{:x 2 :y 0} :white]
+                                   [{:x 2 :y 4} :black]]
+                     :players     [[0 :white]
+                                   [4 :black]]}
         _           (portal.api/clear)
         board       (monku.game.board/initialize-board-state config)
         cards       monku.game.cards/game-cards
@@ -54,7 +59,7 @@
         moves       (->> [piece-white piece-black]
                          (mapcat #(->moves state % card))
                          (map (fn [c] [c :move])))]
-    (tap> [:valid-moves (count moves)])
+    ;; (tap> (valid-card-move? state piece-white card {:x 2 :y 1}))
     (monku.game.visualizer/display-card card config)
     (monku.game.visualizer/display-board state)
     (monku.game.visualizer/display-card (concat pieces moves) config)))
