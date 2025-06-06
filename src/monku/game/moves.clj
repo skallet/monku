@@ -19,7 +19,7 @@
         piece-coord   (first piece)
         card-start    (card->start-coords card)
         with-rotation (fn [n]
-                        (if (= player :white) n (- 0 n)))
+                        (if (= player :white) n (- n)))
         {:keys [x y]} move
         card-offset-x (with-rotation (- (:x card-start) x))
         card-offset-y (with-rotation (- (:y card-start) y))

@@ -39,14 +39,14 @@
 
 (defn render-board [{:keys [pieces config]}]
   (let [positions       (into {} pieces)
-        tempe-positions (into {} (get config :temples))]
+        temple-positions (into {} (get config :temples))]
     [:div (->wrapper-attrs)
      (for [row (reverse (range (get config :size 0)))]
        [:div (->row-attrs row)
         (for [col (range (get config :size 0))]
           (let [coords   {:x col :y row}
                 piece    (get positions coords)
-                temple   (get tempe-positions coords)
+                temple   (get temple-positions coords)
                 bg-color (cond
                            (some? temple) (get colors (if (= :white temple)
                                                         :temple-white
