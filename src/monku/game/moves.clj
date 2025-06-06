@@ -14,7 +14,7 @@
          (or (not collision)
              (not= player (:player collision))))))
 
-(defn card-move->position [move card piece]
+(defn card-move->position [piece card move]
   (let [player (-> piece second :player)
         piece-coord   (first piece)
         card-start    (card->start-coords card)
@@ -30,7 +30,7 @@
 (defn ->moves [board-state piece card]
   (->> card
        (card->move-coords)
-       (mapv #(card-move->position % card piece))
+       (mapv #(card-move->position piece card %))
        (filterv #(valid-move? board-state piece %))))
 
 (defn valid-card-move? [board-state piece card move]
