@@ -16,10 +16,10 @@
   [{:keys [size
            monk-x
            players]
-    :or   {size    5
-           monk-x  2
-           players [[0 :white]
-                    [(dec size) :black]]}}]
+    :or   {size            5
+           monk-x          2
+           players         [[0 :white]
+                            [(dec size) :black]]}}]
   (->> players
        (mapcat (fn [[figs-y player-type]]
                  (create-figs {:size        size

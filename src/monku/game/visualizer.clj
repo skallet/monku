@@ -37,11 +37,14 @@
     (let [{:keys [player piece]} piece]
       (get-in pieces [player piece]))))
 
-(defn render-board [{:keys [pieces config]}]
+(defn render-board [{:keys [pieces config
+                            black-pov]
+                     :or {black-pov false}}]
   (let [positions       (into {} pieces)
-        temple-positions (into {} (get config :temples))]
+        temple-positions (into {} (get config :temples))
+        row-fn (if black-pov identity reverse)]
     [:div (->wrapper-attrs)
-     (for [row (reverse (range (get config :size 0)))]
+     (for [row (row-fn (range (get config :size 0)))]
        [:div (->row-attrs row)
         (for [col (range (get config :size 0))]
           (let [coords   {:x col :y row}
