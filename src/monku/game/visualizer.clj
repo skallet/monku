@@ -111,9 +111,9 @@
                 :players [[0 :white]
                           [4 :black]]}]
     #_(display-board {:pieces (monku.game.board/initialize-board-state config)
-                    :config config})
+                      :config config})
     #_(display-board-and-cards {:pieces (monku.game.board/initialize-board-state config)
-                              :config config}
-                             (take 3 monku.game.cards/game-cards)))
+                                :config config}
+                               (take 3 monku.game.cards/game-cards)))
 
   :done)

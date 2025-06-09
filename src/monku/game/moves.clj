@@ -47,8 +47,8 @@
           player-cards)))
 
 (defn do-move [board-state piece card move]
-  (let [player  (-> piece second :player)
-        playing (get board-state :player)
+  (let [player       (-> piece second :player)
+        playing      (get board-state :player)
         next-playing (if (= :white playing) :black :white)]
     (if-not (and (valid-card-move? board-state piece card move)
                  (player-has-given-card? board-state player card)
@@ -63,12 +63,12 @@
           (update-in [:cards next-playing] conj card)
           (update :pieces (fn [pieces]
                             (->> pieces
-                                 (filter (fn [p]
-                                           (not= (first p) move)))
-                                 (map (fn [p]
-                                        (if (= p piece)
-                                          [move (second p)]
-                                          p))))))))))
+                                 (filterv (fn [p]
+                                            (not= (first p) move)))
+                                 (mapv (fn [p]
+                                         (if (= p piece)
+                                           [move (second p)]
+                                           p))))))))))
 
 (defn get-only-types [pieces type]
   (->> pieces
@@ -157,30 +157,32 @@
                            [c :piece])
                          [piece-white piece-black])
         state       {:pieces board
-                     :player :white
+                     :player :black
                      :status :playing
-                     :cards  {:white [card
-                                      (nth cards 1)
+                     :cards  {:white [(nth cards 1)
                                       (nth cards 2)]
                               :black [(nth cards 3)
-                                      (nth cards 4)]}
+                                      (nth cards 4)
+                                      card]}
                      :moves  []
                      :config config}
         moves-white (->moves state piece-white card)
         moves-black (->moves state piece-black card)
         moves       (->> (concat moves-white moves-black)
                          (map (fn [c] [c :move])))
-        move        (when (seq moves-white)
-                      (rand-nth moves-white))
+        ;; move        (when (seq moves-white)
+        ;;               (rand-nth moves-white))
+        move        (when (seq moves-black)
+                      (rand-nth moves-black))
         ;; move        {:x 1 :y 2}
         next-state  (-> state
-                        (do-move piece-white card move)
+                        (do-move piece-black card move)
                         (update-status))]
     (monku.game.visualizer/display-board-and-cards state [card
-                                                          (concat pieces moves)
-                                                          [[(first piece-white) :piece]
+                                                          ;; (concat pieces moves)
+                                                          [[(first piece-black) :piece]
                                                            [move :move]]])
     (monku.game.visualizer/display-board-and-cards next-state
                                                    (get-in next-state [:cards :black]))
     (tap> next-state)
-    (tap> [:score (calculate-board-score state) (calculate-board-score next-state)])))
+    #_(tap> [:score (calculate-board-score state) (calculate-board-score next-state)])))
